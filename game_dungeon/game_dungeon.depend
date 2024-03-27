@@ -1,0 +1,42 @@
+# depslib dependency file v1.0
+1711286806 source:c:\ltnc\code\game_dungeon\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"screen.h"
+	"graphics.h"
+	"gameplay.h"
+
+1711285184 c:\ltnc\code\game_dungeon\screen.h
+
+1711285205 c:\ltnc\code\game_dungeon\graphics.h
+	<SDL.h>
+	<SDL_image.h>
+
+1711286863 c:\ltnc\code\game_dungeon\gameplay.h
+	<bits/stdc++.h>
+
+1711377670 source:c:\ltnc\game project\game_dungeon\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"screen.h"
+	"graphics.h"
+	"gameplay.h"
+	"render.h"
+
+1711376422 c:\ltnc\game project\game_dungeon\screen.h
+
+1711373781 c:\ltnc\game project\game_dungeon\graphics.h
+	<SDL.h>
+	<SDL_image.h>
+	<vector>
+
+1711373925 c:\ltnc\game project\game_dungeon\gameplay.h
+	<bits/stdc++.h>
+
+1711375263 c:\ltnc\game project\game_dungeon\render.h
+	"screen.h"
+	"graphics.h"
+	"gameplay.h"
+
