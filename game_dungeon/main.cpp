@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
 {
     Graphics graphics;
     graphics.init();
-    SDL_Texture* g_bkground  = graphics.loadTexture("background.png");
-    SDL_Texture* i_charactor = graphics.loadTexture("charactor.png");
-    SDL_Texture* monster_1 = graphics.loadTexture("monster.png");
-    SDL_Texture* monster_2 = graphics.loadTexture("monster.png");
+    SDL_Texture* g_bkground  = graphics.loadTexture(BG);
+    SDL_Texture* i_charactor = graphics.loadTexture(CHARACTOR);
+    SDL_Texture* monster_1 = graphics.loadTexture(MONSTER);
+    SDL_Texture* monster_2 = graphics.loadTexture(MONSTER);
 
     Sprite man;
     Sprite *animation= &man;
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 
 
      //xóa phông nền với màu (0,255,255)
-    SDL_Surface* image = IMG_Load("charactor.png");
+    SDL_Surface* image = IMG_Load(CHARACTOR);
     Uint32 backgroundColor = SDL_MapRGB(image->format,0,255,255);
     SDL_SetColorKey(image, SDL_TRUE, backgroundColor);
 

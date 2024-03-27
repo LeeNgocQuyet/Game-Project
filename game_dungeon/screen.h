@@ -6,6 +6,10 @@ const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 600;
 const int SCREEN_BPP = 32;
 const char* WINDOW_TITLE = "dungeon";
+const char* BG = "img\\background.png";
+const char* CHARACTOR = "img\\charactor.png";
+const char* MONSTER = "img\\monster.png";
+
 
 const char* MAN_SPRITE_FILE = "img\\_Jump.png";
 const int MAN_CLIPS[][4] = {
