@@ -1,5 +1,5 @@
-#ifndef _gameplay__H
-#define _gameplay__H
+#ifndef _object__H
+#define _object__H
 #include <bits/stdc++.h>
 const float GRAVITY = -10;
 
@@ -62,7 +62,7 @@ struct game{
 struct object{
     int hp,atk,def;
     float range_attack;
-    float x=900, y=300,h_ground=300;
+    float x=900, y=500,h_ground=500;
     float x_left,x_right;
     bool left_right=1;
     float speed,jump_force;

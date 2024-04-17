@@ -16,16 +16,16 @@
 1711286863 c:\ltnc\code\game_dungeon\gameplay.h
 	<bits/stdc++.h>
 
-1711519571 source:c:\ltnc\game project\game_dungeon\main.cpp
+1712128177 source:c:\ltnc\game project\game_dungeon\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
 	"screen.h"
 	"graphics.h"
-	"gameplay.h"
+	"object.h"
 	"render.h"
 
-1711519580 c:\ltnc\game project\game_dungeon\screen.h
+1712128177 c:\ltnc\game project\game_dungeon\screen.h
 
 1711503364 c:\ltnc\game project\game_dungeon\graphics.h
 	<SDL.h>
@@ -35,8 +35,11 @@
 1711373925 c:\ltnc\game project\game_dungeon\gameplay.h
 	<bits/stdc++.h>
 
-1711502825 c:\ltnc\game project\game_dungeon\render.h
+1711520465 c:\ltnc\game project\game_dungeon\render.h
 	"screen.h"
 	"graphics.h"
-	"gameplay.h"
+	"object.h"
+
+1712126459 c:\ltnc\game project\game_dungeon\object.h
+	<bits/stdc++.h>
 
