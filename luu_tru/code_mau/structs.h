@@ -57,8 +57,46 @@ public:
         return &(clips[currentFrame]);
     }
 };
+class Entity {//:type{z
+public:
+	int x;
+	int y;
+	int w;
+	int h;
+    float dx;
+	float dy;
+	float angle;
+	float cos=1,sin=1;
+	int side;
+	int health;
+	int reload;
+	int timeExist=10;
+	SDL_Texture *texture;
+
+	void move() {
+	    x += dx;
+	    y += dy;
+	}
+	bool isMoving(){
+        if (dx==0&&dy==0) return false;
+        return true;
+	}
+	void existence(){
+        timeExist--;
+	}
+	bool collides(Entity* other) {
+        return (
+          x <= other->x + other->w &&
+          x + w >= other->x &&
+          y <= other->y + other->h &&
+          y + h >= other->y    );
+	}
+	bool offScreen() {
+	     return x < -w || y < -h || x > SCREEN_WIDTH || y > SCREEN_HEIGHT;
+	}
 
 
+};
 
 
 

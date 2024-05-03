@@ -1,0 +1,124 @@
+# depslib dependency file v1.0
+1714008403 source:c:\ltnc\game project\survival\code_mau\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"defs.h"
+	"input.h"
+	"graphics.h"
+	"logic.h"
+	<ctime>
+
+1713940812 c:\ltnc\game project\survival\code_mau\defs.h
+
+1713891719 c:\ltnc\game project\survival\code_mau\input.h
+	<SDL.h>
+	"defs.h"
+	"structs.h"
+
+1714384829 c:\ltnc\game project\survival\code_mau\structs.h
+	<list>
+	<SDL.h>
+	<SDL_image.h>
+	"defs.h"
+	<cmath>
+	<vector>
+
+1713940273 c:\ltnc\game project\survival\code_mau\graphics.h
+	<SDL.h>
+	<SDL_image.h>
+	"defs.h"
+
+1714384818 c:\ltnc\game project\survival\code_mau\logic.h
+	<iostream>
+	<list>
+	<SDL.h>
+	<SDL_image.h>
+	"defs.h"
+	"graphics.h"
+	"structs.h"
+	"calculate.h"
+	"animation_frame.h"
+	"clip.h"
+
+1712569872 c:\ltnc\game project\survival\code_mau\calculate.h
+	<math.h>
+	<iostream>
+
+1712825329 source:c:\ltnc\game project\survival\code_mau\defs.cpp
+
+1712822996 c:\ltnc\game project\survival\code_mau\defs.cpp
+	<iostream>
+
+1712823373 c:\ltnc\game project\survival\code_mau\animation_frame.h
+
+1713338771 c:\ltnc\game project\survival\code_mau\clip.h
+
+1714576984 source:c:\ltnc\game project\luu_tru\code_mau\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	"defs.h"
+	"input.h"
+	"graphics.h"
+	"logic.h"
+	<ctime>
+
+1714385172 c:\ltnc\game project\luu_tru\code_mau\defs.h
+
+1713891719 c:\ltnc\game project\luu_tru\code_mau\input.h
+	<SDL.h>
+	"defs.h"
+	"structs.h"
+
+1714567261 c:\ltnc\game project\luu_tru\code_mau\structs.h
+	<list>
+	<SDL.h>
+	<SDL_image.h>
+	"defs.h"
+	<cmath>
+	<vector>
+
+1714631832 c:\ltnc\game project\luu_tru\code_mau\graphics.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	"defs.h"
+	"structs.h"
+
+1714634268 c:\ltnc\game project\luu_tru\code_mau\logic.h
+	<iostream>
+	<list>
+	<SDL.h>
+	<SDL_image.h>
+	"defs.h"
+	"graphics.h"
+	"structs.h"
+	"calculate.h"
+	"animation_frame.h"
+	"clip.h"
+
+1714634268 c:\ltnc\game project\luu_tru\code_mau\calculate.h
+	<math.h>
+	<iostream>
+
+1712823373 c:\ltnc\game project\luu_tru\code_mau\animation_frame.h
+
+1714634193 c:\ltnc\game project\luu_tru\code_mau\clip.h
+
+1714632276 source:c:\ltnc\game project\luu_tru\code_mau\logic.cpp
+	"logic.h"
+
+1714633827 source:c:\ltnc\game project\luu_tru\code_mau\class.cpp
+	"logic.h"
+
+1714633062 source:c:\ltnc\game project\luu_tru\code_mau\calculate.cpp
+	"calculate.h"
+	<bits/stdc++.h>
+
+1714633180 source:c:\ltnc\game project\luu_tru\code_mau\initplayer.cpp
+	"logic.h"
+
+1714634186 source:c:\ltnc\game project\luu_tru\code_mau\clip.cpp
+

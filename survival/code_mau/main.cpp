@@ -5,40 +5,18 @@
 #include "input.h"
 #include "graphics.h"
 #include "logic.h"
+#include "BaseEntity.h"
 #include <ctime>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
-    srand(time(0));
 
-    Graphics graphics;
-    graphics.init();
+int main(int argc, char *argv[]) {
+    SDL_Texture *a;
 
-    Input input;
-    input.init();
-    Game game;
-    game.init(graphics);
-
-    while (1)
-	{
-		graphics.prepareScene();
-
-		input.get();
-
-		game.doLogic(input.keyboard);
-        game.draw(graphics);
-
-		graphics.presentScene();
-
-		SDL_Delay(10);
-	}
-
-    graphics.quit();
+    Enemy e(100,10);
+    e.setBaseEntity(1,2,3,4,5,6,a);
+    cout<<e.x;
     return 0;
 }
-
-
-
 

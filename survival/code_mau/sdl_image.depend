@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1712733441 source:c:\ltnc\game project\survival\code_mau\main.cpp
+1714395763 source:c:\ltnc\game project\survival\code_mau\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -7,16 +7,17 @@
 	"input.h"
 	"graphics.h"
 	"logic.h"
+	"BaseEntity.h"
 	<ctime>
 
-1712470543 c:\ltnc\game project\survival\code_mau\defs.h
+1714385172 c:\ltnc\game project\survival\code_mau\defs.h
 
-1712414355 c:\ltnc\game project\survival\code_mau\input.h
+1713891719 c:\ltnc\game project\survival\code_mau\input.h
 	<SDL.h>
 	"defs.h"
 	"structs.h"
 
-1713333134 c:\ltnc\game project\survival\code_mau\structs.h
+1714389216 c:\ltnc\game project\survival\code_mau\structs.h
 	<list>
 	<SDL.h>
 	<SDL_image.h>
@@ -24,22 +25,15 @@
 	<cmath>
 	<vector>
 
-1712824640 c:\ltnc\game project\survival\code_mau\graphics.h
+1713940273 c:\ltnc\game project\survival\code_mau\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	"defs.h"
 
-1712914150 c:\ltnc\game project\survival\code_mau\logic.h
-	<iostream>
-	<list>
-	<SDL.h>
-	<SDL_image.h>
-	"defs.h"
-	"graphics.h"
-	"structs.h"
-	"calculate.h"
-	"animation_frame.h"
-	"clip.h"
+1714396072 c:\ltnc\game project\survival\code_mau\logic.h
+	"BaseEntity.h"
+	<vector>
+	<string>
 
 1712569872 c:\ltnc\game project\survival\code_mau\calculate.h
 	<math.h>
@@ -52,5 +46,19 @@
 
 1712823373 c:\ltnc\game project\survival\code_mau\animation_frame.h
 
-1712912158 c:\ltnc\game project\survival\code_mau\clip.h
+1713338771 c:\ltnc\game project\survival\code_mau\clip.h
+
+1714392365 source:c:\ltnc\game project\survival\code_mau\baseentity.cpp
+	"BaseEntity.h"
+
+1714398476 c:\ltnc\game project\survival\code_mau\baseentity.h
+	<list>
+	<SDL.h>
+	<SDL_image.h>
+	<cmath>
+	<SDL_render.h>
+	"defs.h"
+
+1714395990 source:c:\ltnc\game project\survival\code_mau\logic.cpp
+	"logic.h"
 

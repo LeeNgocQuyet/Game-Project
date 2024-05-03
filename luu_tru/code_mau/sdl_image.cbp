@@ -32,16 +32,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="BaseEntity.cpp" />
-		<Unit filename="BaseEntity.h" />
 		<Unit filename="animation_frame.h" />
 		<Unit filename="calculate.h" />
 		<Unit filename="clip.h" />
-		<Unit filename="defs.cpp" />
 		<Unit filename="defs.h" />
 		<Unit filename="graphics.h" />
 		<Unit filename="input.h" />
-		<Unit filename="logic.cpp" />
 		<Unit filename="logic.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="structs.h" />
