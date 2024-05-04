@@ -45,7 +45,6 @@ struct Input {
                     break;
 
 
-
                 default:
                     break;
             }
