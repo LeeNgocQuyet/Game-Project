@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     Graphics graphics;
     graphics.init();
-    Mix_Music *gMusic = graphics.loadMusic("assets\\RunningAway.mp3");
+    Mix_Music *gMusic = graphics.loadMusic("assets\\backgroundMusic.mp3");
     graphics.play(gMusic);
 
 

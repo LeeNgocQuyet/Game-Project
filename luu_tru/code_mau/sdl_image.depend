@@ -54,7 +54,7 @@
 
 1713338771 c:\ltnc\game project\survival\code_mau\clip.h
 
-1714576984 source:c:\ltnc\game project\luu_tru\code_mau\main.cpp
+1714810706 source:c:\ltnc\game project\luu_tru\code_mau\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -80,18 +80,19 @@
 	<cmath>
 	<vector>
 
-1714631832 c:\ltnc\game project\luu_tru\code_mau\graphics.h
+1714750467 c:\ltnc\game project\luu_tru\code_mau\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_mixer.h>
 	"defs.h"
 	"structs.h"
 
-1714634268 c:\ltnc\game project\luu_tru\code_mau\logic.h
+1714810598 c:\ltnc\game project\luu_tru\code_mau\logic.h
 	<iostream>
 	<list>
 	<SDL.h>
 	<SDL_image.h>
+	<SDL_mixer.h>
 	"defs.h"
 	"graphics.h"
 	"structs.h"
