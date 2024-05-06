@@ -23,12 +23,15 @@ int main(int argc, char *argv[])
     graphics.play(gMusic);
 
     Input input;
+    Input menuInput;
+    menuInput.init();
     input.init();
 
     Game game;
     game.init(graphics);
-    input.get();
+    menuInput.init();
     //MenuBegin
+
     Menu play("play",100,100);
     Menu setting("setting",100,200);
     Menu quit("quit",100,300);
@@ -40,29 +43,55 @@ int main(int argc, char *argv[])
     setting.render(graphics);
     quit.render(graphics);
     graphics.presentScene();
+    SDL_Event m_event;
+    bool isRunning = true;
+    while (isRunning) {
+        SDL_WaitEvent(&m_event);
 
-    while (input.mouseButtonDown==0){
+        switch (m_event.type) {
+            case SDL_QUIT:
+                isRunning = false;
+                break;
 
-        input.get();
+            case SDL_MOUSEBUTTONDOWN:
+                int mouseX, mouseY;
+                SDL_GetMouseState(&mouseX, &mouseY);
 
+                if (play.isClicked(mouseX, mouseY)) {
+                    while (game.stageResetTimer>0)
+                    {
+
+                        graphics.prepareScene();
+
+                        input.get();
+
+                        game.doLogic(input.keyboard,input.mouseButtonDown,input.mouseX,input.mouseY);
+                        game.draw(graphics);
+
+                        graphics.presentScene();
+
+                        SDL_Delay(20);
+
+                    }
+
+
+                } else if (setting.isClicked(mouseX, mouseY)) {
+                    cout<<"2";
+                } else if (quit.isClicked(mouseX, mouseY)) {
+                    cout<<"3";
+                    isRunning = false;
+                }
+                break;
+        }
+        play.render(graphics);
+        setting.render(graphics);
+        quit.render(graphics);
+        graphics.presentScene();
     }
+    SDL_Quit();
     //MenuEnd
     SDL_Delay(1000);
-    while (1)
-	{
 
-		graphics.prepareScene();
-
-		input.get();
-
-		game.doLogic(input.keyboard,input.mouseButtonDown,input.mouseX,input.mouseY);
-        game.draw(graphics);
-
-		graphics.presentScene();
-
-		SDL_Delay(20);
-
-	}
 
     return 0;
 }

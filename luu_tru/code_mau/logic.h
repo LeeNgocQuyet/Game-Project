@@ -388,8 +388,7 @@ struct Game {
     }
     void doLogic(int keyboard[],bool mouseButtonDown,int mouseX,int mouseY) {
         doBackground();
-        if (player.health <= 0 && stageResetTimer--<0)
-            reset();
+        if (player.health <= 0) stageResetTimer--;
 
         doPlayer(keyboard,mouseButtonDown,mouseX,mouseY);
         doFighters();

@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="shooting" />
+		<Option title="survival" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -32,6 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Untitled1.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="animation_frame.h" />
 		<Unit filename="calculate.h" />
 		<Unit filename="clip.h" />
@@ -40,8 +43,10 @@
 		<Unit filename="input.h" />
 		<Unit filename="logic.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="menu.cpp" />
 		<Unit filename="menu.h" />
 		<Unit filename="structs.h" />
+		<Unit filename="texxtBox.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

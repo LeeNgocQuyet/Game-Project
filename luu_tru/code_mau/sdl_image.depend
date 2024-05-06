@@ -54,7 +54,7 @@
 
 1713338771 c:\ltnc\game project\survival\code_mau\clip.h
 
-1714839809 source:c:\ltnc\game project\luu_tru\code_mau\main.cpp
+1715012328 source:c:\ltnc\game project\luu_tru\code_mau\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -89,7 +89,7 @@
 	"defs.h"
 	"structs.h"
 
-1714810598 c:\ltnc\game project\luu_tru\code_mau\logic.h
+1715012425 c:\ltnc\game project\luu_tru\code_mau\logic.h
 	<iostream>
 	<list>
 	<SDL.h>
@@ -125,7 +125,23 @@
 
 1714634186 source:c:\ltnc\game project\luu_tru\code_mau\clip.cpp
 
-1714839796 c:\ltnc\game project\luu_tru\code_mau\menu.h
+1715012076 c:\ltnc\game project\luu_tru\code_mau\menu.h
 	<SDL_ttf.h>
 	"graphics.h"
+	<string>
+
+1715012073 source:c:\ltnc\game project\luu_tru\code_mau\menu.cpp
+	"menu.h"
+
+1715007825 source:c:\ltnc\game project\luu_tru\code_mau\textbox.cpp
+	"menu.h"
+
+1714894349 source:c:\ltnc\game project\luu_tru\code_mau\texxtbox.cpp
+
+1715010739 source:c:\ltnc\game project\luu_tru\code_mau\button.cpp
+	"menu.h"
+
+1715007305 source:c:\ltnc\game project\luu_tru\code_mau\label.cpp
+
+1715011063 source:c:\ltnc\game project\luu_tru\code_mau\untitled1.c
 
