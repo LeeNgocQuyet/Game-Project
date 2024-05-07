@@ -93,12 +93,19 @@ struct Graphics {
 
         SDL_RenderCopy(renderer, texture, src, &dest);
     }
-    void render(const int x,const int y,const animation& a) {
+    void render(const int x,const int y,const animation& a,bool flip_horizontal ) {
         const SDL_Rect* clip = a.getCurrentClip();
         SDL_Rect renderQuad = {x, y, clip->w, clip->h};
-        SDL_RenderCopy(renderer,
+        if (flip_horizontal) {
+        renderQuad.x += renderQuad.w;
+        renderQuad.w = -renderQuad.w;
+        SDL_RenderCopyEx(renderer,
                         a.texture,
-                         clip, &renderQuad);
+                         clip, &renderQuad,0, NULL,SDL_FLIP_NONE );
+        }
+        SDL_RenderCopyEx(renderer,
+                        a.texture,
+                         clip, &renderQuad,0, NULL,SDL_FLIP_HORIZONTAL);
     }
     Mix_Music *loadMusic(const char* path)
     {

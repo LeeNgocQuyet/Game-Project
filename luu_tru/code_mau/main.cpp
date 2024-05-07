@@ -10,7 +10,6 @@
 #include "menu.h"
 #include <ctime>
 
-
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -26,23 +25,33 @@ int main(int argc, char *argv[])
     Input menuInput;
     menuInput.init();
     input.init();
-
     Game game;
     game.init(graphics);
     menuInput.init();
-    //MenuBegin
+
+    //Menu
 
     Menu play("play",100,100);
-    Menu setting("setting",100,200);
+    Menu replay("replay",100,100);
+    Menu setting("credit",100,200);
     Menu quit("quit",100,300);
     play.init(graphics);
+    replay.init(graphics);
     setting.init(graphics);
     quit.init(graphics);
 
     play.render(graphics);
     setting.render(graphics);
     quit.render(graphics);
-    graphics.presentScene();
+
+    SDL_Texture* background = graphics.loadTexture("img/background.jpg");
+    SDL_Rect dest;
+        dest.x = 0;
+        dest.y = 0;
+        dest.w = SCREEN_WIDTH;
+        dest.h = SCREEN_HEIGHT;
+    SDL_RenderCopy(graphics.renderer, background, NULL, &dest);
+
     SDL_Event m_event;
     bool isRunning = true;
     while (isRunning) {
@@ -58,9 +67,9 @@ int main(int argc, char *argv[])
                 SDL_GetMouseState(&mouseX, &mouseY);
 
                 if (play.isClicked(mouseX, mouseY)) {
+                    game.reset();
                     while (game.stageResetTimer>0)
                     {
-
                         graphics.prepareScene();
 
                         input.get();
@@ -73,24 +82,23 @@ int main(int argc, char *argv[])
                         SDL_Delay(20);
 
                     }
-
-
+                    cout<<"1";
                 } else if (setting.isClicked(mouseX, mouseY)) {
+                    graphics.prepareScene();
                     cout<<"2";
+
                 } else if (quit.isClicked(mouseX, mouseY)) {
-                    cout<<"3";
                     isRunning = false;
                 }
                 break;
         }
-        play.render(graphics);
+        if(game.replay==1) replay.render(graphics);
+        else play.render(graphics);
         setting.render(graphics);
         quit.render(graphics);
         graphics.presentScene();
     }
     SDL_Quit();
-    //MenuEnd
-    SDL_Delay(1000);
 
 
     return 0;

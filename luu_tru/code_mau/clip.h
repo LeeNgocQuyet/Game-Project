@@ -44,4 +44,15 @@ const int DEAD_CLIPS[][4]
     {100, 0, 20, 20}};
 
 const int DEAD_FRAMES = sizeof(DEAD_CLIPS)/sizeof(int)/4;
+
+//slime
+const char* SLIME_FILE = "img/slime/slime_move.png";
+const int SLIME_CLIPS[][4]
+={
+    {  0, 0, 32, 25},
+    { 32, 0, 32, 25},
+    {64, 0, 32, 25},
+    {96, 0, 32, 25}};
+
+const int SLIME_FRAMES = sizeof(SLIME_CLIPS)/sizeof(int)/4;
 #endif // _clip_h

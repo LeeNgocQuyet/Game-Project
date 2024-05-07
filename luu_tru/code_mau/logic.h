@@ -21,7 +21,7 @@ void initPlayer(Entity& player) {
 }
 
 struct Game {
-
+    bool replay=0;
     Entity player;
     list<Entity*> rangeEnemy;
     list<Entity*> meleeEnemy;
@@ -30,19 +30,21 @@ struct Game {
     list<Entity*> slashes;
 	list<Entity*> fighters;
 
+    animation slime;
     animation idle;
     animation run;
     animation getHit;
     animation dead;
     animation* status= &idle;
 
-    SDL_Texture *bulletTexture, *enemyTexture,*enemy_2Texture, *enemyBulletTexture,*enemySlashTexture,
-    *background,*idleTexture,*runTexture,*getHitTexture,*deadTexture,*Idle,*Run,*GetHit,*Dead;
+    SDL_Texture *background,*bulletTexture, *enemyTexture,*enemy_2Texture, *enemyBulletTexture,*enemySlashTexture,
+    *idleTexture,*runTexture,*getHitTexture,*deadTexture,*Idle,*Run,*GetHit,*Dead,*slimeMove,*slimeTexture;
     Mix_Chunk *fireBulletSound = Mix_LoadWAV("assets\\bulletSound.wav");
     Mix_Chunk *slashSound = Mix_LoadWAV("assets\\slashSound.wav");
     Mix_Chunk *enemyBulletSound = Mix_LoadWAV("assets\\enemyBulletSound.wav");
     Mix_Chunk *deadMusic = Mix_LoadWAV("assets\\deadSound.wav");
     Mix_Chunk *movingSound = Mix_LoadWAV("assets\\movingSound.wav");
+    Mix_Chunk *takeDamge = Mix_LoadWAV("assets\\takeDamge.wav");
 
     int enemySpawnTimer;
     int stageResetTimer;
@@ -82,6 +84,9 @@ struct Game {
         enemyBulletTexture = graphics.loadTexture("img/enemyBullet.png");
         background = graphics.loadTexture("img/bikiniBottom.jpg");
 
+        slimeMove = graphics.loadTexture(SLIME_FILE);
+        slimeTexture = graphics.loadTexture(SLIME_FILE);
+        slime.init(slimeTexture, SLIME_FRAMES, SLIME_CLIPS);
 
         Idle = graphics.loadTexture(IDLE_SPRITE_FILE);
         idleTexture = graphics.loadTexture(IDLE_SPRITE_FILE);
@@ -179,8 +184,8 @@ struct Game {
         if (player.reload > 0) player.reload--;
         if (keyboard[SDL_SCANCODE_UP]) player.dy = -PLAYER_SPEED;
         if (keyboard[SDL_SCANCODE_DOWN]) player.dy = PLAYER_SPEED;
-        if (keyboard[SDL_SCANCODE_LEFT]) player.dx = -PLAYER_SPEED;
-        if (keyboard[SDL_SCANCODE_RIGHT]) player.dx = PLAYER_SPEED;
+        if (keyboard[SDL_SCANCODE_LEFT]) {player.dx = -PLAYER_SPEED;player.turnleft=false;}
+        if (keyboard[SDL_SCANCODE_RIGHT]) {player.dx = PLAYER_SPEED;player.turnleft=true;}
         if (mouseButtonDown && player.reload == 0) {fireBullet(mouseX,mouseY);Mix_PlayChannel(-1,fireBulletSound,0);};
 
         if (!player.isMoving()) status = &idle;
@@ -189,12 +194,26 @@ struct Game {
 
     bool slashHitFighter(Entity *b)
     {
-
-        if (player.collides(b)){
+        if (player.collides(b)&&player.ImmunityDamage==0){
             player.health -= 1;
             status=&getHit;
+            player.ImmunityDamage=100;
+            Mix_PlayChannel(-1,takeDamge,0);
             return true;
         }
+        return false;
+    }
+
+    bool bulletHitPlayer(Entity *b)
+    {
+            if (player.side != b->side
+                && b->collides(&player)&&player.ImmunityDamage==0) {
+                player.health -= 1;
+                status=&getHit;
+                player.ImmunityDamage=100;
+                Mix_PlayChannel(-1,takeDamge,0);
+                return true;
+            }
         return false;
     }
 
@@ -216,15 +235,7 @@ struct Game {
         }
         return false;
     }
-    bool bulletHitPlayer(Entity *b)
-    {
-            if (player.side != b->side
-                && b->collides(&player)) {
-                player.health -= 1;
-                return true;
-            }
-        return false;
-    }
+
 
     void doSlash(void)
     {
@@ -238,8 +249,9 @@ struct Game {
                 slashes.erase(temp);
             }
             else
-            if (slashHitFighter(b) || b->offScreen()) {
+            if (slashHitFighter(b) ) {
                 delete b;
+                status=&getHit;
                 slashes.erase(temp);
             }
         }
@@ -252,7 +264,12 @@ struct Game {
             auto temp = it++;
             Entity* b = *temp;
             b->move();
-            if (bulletHitPlayer(b) || b->offScreen()) {
+            if (bulletHitPlayer(b)) {
+                status=&getHit;
+                delete b;
+                enemyBullets.erase(temp);
+            }
+            if ( b->offScreen()){
                 delete b;
                 enemyBullets.erase(temp);
             }
@@ -277,6 +294,7 @@ struct Game {
         for (Entity* e: meleeEnemy) {
             calcSlope(player.x + (player.w / 2), player.y + (player.h / 2),
                   e->x, e->y, &e->dx, &e->dy);
+            //if (e!=&player) e->setTurnLeft(player);
             if (e != &player && player.health != 0 && --e->reload <= 0){
                 doEnemySlash(e);
             }
@@ -284,6 +302,7 @@ struct Game {
         for (Entity* e: rangeEnemy) {
             calcSlope(player.x + (player.w / 2), player.y + (player.h / 2),
                   e->x, e->y, &e->dx, &e->dy);
+
             if (e != &player && player.health != 0 && --e->reload <= 0){
                 fireEnemyBullet(e);
             }
@@ -388,7 +407,7 @@ struct Game {
     }
     void doLogic(int keyboard[],bool mouseButtonDown,int mouseX,int mouseY) {
         doBackground();
-        if (player.health <= 0) stageResetTimer--;
+        if (player.health <= 0) {stageResetTimer--;replay=1;}
 
         doPlayer(keyboard,mouseButtonDown,mouseX,mouseY);
         doFighters();
@@ -422,23 +441,26 @@ struct Game {
         graphics.renderer;
         if (player.health>0)
         {
+            slime.slimetick();
+            if (player.ImmunityDamage>0) player.ImmunityDamage--;
             for (Entity* b: rangeEnemy)
                 if (b->health > 0)
                 {
-                    if (b!= &player) graphics.renderTexture(b->texture, b->x, b->y);
+                    if (b!= &player) {//graphics.renderTexture(b->texture, b->x, b->y);
+                        b->setTurnLeft(player);
+                        graphics.render(b->x,b->y,slime,b->turnleft);
+                        }
                     else {
+
+                        graphics.render(player.x,player.y,*status,player.turnleft);
                         status->tick();
-                        graphics.render(player.x,player.y,*status);
                     }
                 }
             for (Entity* b: meleeEnemy)
                 if (b->health > 0)
                 {
                     if (b!= &player) graphics.renderTexture(b->texture, b->x, b->y);
-                    else {
-                        status->tick();
-                        graphics.render(player.x,player.y,*status);
-                    }
+
                 }
             for (Entity* b: bullets)
                 graphics.renderTexture(b->texture, b->x, b->y);
@@ -454,7 +476,7 @@ struct Game {
             if (status!=&dead)Mix_PlayChannel(-1,deadMusic,0);
             status=&dead;
             status->tick();
-            graphics.render(player.x,player.y,*status);
+            graphics.render(player.x,player.y,*status,0);
 
         }
 

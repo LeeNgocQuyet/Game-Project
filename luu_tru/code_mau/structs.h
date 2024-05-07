@@ -52,6 +52,9 @@ public:
         if (i<=0) {i=3;
         currentFrame = (currentFrame + 1) % clips.size();}
     }
+    void slimetick(){
+        currentFrame = (currentFrame + 1) % clips.size();
+    }
 
     const SDL_Rect* getCurrentClip() const {
         return &(clips[currentFrame]);
@@ -59,6 +62,8 @@ public:
 };
 class Entity {//:type{z
 public:
+
+    int ImmunityDamage=0;
 	int x;
 	int y;
 	int w;
@@ -71,6 +76,7 @@ public:
 	int health;
 	int reload;
 	int timeExist=10;
+	bool turnleft=1;
 	SDL_Texture *texture;
 
 	void move() {
@@ -95,6 +101,7 @@ public:
 	     return x < -w || y < -h || x > SCREEN_WIDTH || y > SCREEN_HEIGHT;
 	}
 
+    void setTurnLeft(Entity& other);
 
 };
 
