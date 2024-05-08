@@ -9,6 +9,7 @@
 #define PLAYER_BULLET_SPEED   8
 #define PLAYER_RELOAD          16
 #define MAX_KEYBOARD_KEYS 350
+#define maxHealth 20
 
 #define SIDE_PLAYER 0
 #define SIDE_ENEMY  1

@@ -124,6 +124,7 @@ struct Graphics {
                            SDL_LOG_PRIORITY_ERROR,
                "Could not load sound! SDL_mixer Error: %s", Mix_GetError());
         }
+        return gChunk;
     }
     void play(Mix_Chunk* gChunk) {
         if (gChunk != nullptr) {
@@ -150,6 +151,7 @@ struct Graphics {
                            SDL_LOG_PRIORITY_ERROR,
                            "Load font %s", TTF_GetError());
         }
+        return gFont;
     }
     SDL_Texture* renderText(const char* text,
                             TTF_Font* font, SDL_Color textColor)

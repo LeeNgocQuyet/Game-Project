@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_render.h>
 #include "defs.h"
 #include "graphics.h"
 #include "structs.h"
@@ -15,7 +16,7 @@
 void initPlayer(Entity& player) {
     player.x = 400;
     player.y = 300;
-    player.health = 5;
+    player.health = 20;
     player.side = SIDE_PLAYER;
     player.reload = 0;
 }
@@ -30,6 +31,12 @@ struct Game {
     list<Entity*> slashes;
 	list<Entity*> fighters;
 
+	SDL_Surface* health_bar = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0xFF000000, 0x00FF0000, 0x000000FF, 0xFF000000);
+	int healthPercent = 1;
+    int redLength = (healthPercent * SCREEN_WIDTH);
+    double elapsedTime = 0;
+    int minutes ,seconds ;
+
     animation slime;
     animation idle;
     animation run;
@@ -37,14 +44,11 @@ struct Game {
     animation dead;
     animation* status= &idle;
 
+    TTF_Font* font;
+
     SDL_Texture *background,*bulletTexture, *enemyTexture,*enemy_2Texture, *enemyBulletTexture,*enemySlashTexture,
     *idleTexture,*runTexture,*getHitTexture,*deadTexture,*Idle,*Run,*GetHit,*Dead,*slimeMove,*slimeTexture;
-    Mix_Chunk *fireBulletSound = Mix_LoadWAV("assets\\bulletSound.wav");
-    Mix_Chunk *slashSound = Mix_LoadWAV("assets\\slashSound.wav");
-    Mix_Chunk *enemyBulletSound = Mix_LoadWAV("assets\\enemyBulletSound.wav");
-    Mix_Chunk *deadMusic = Mix_LoadWAV("assets\\deadSound.wav");
-    Mix_Chunk *movingSound = Mix_LoadWAV("assets\\movingSound.wav");
-    Mix_Chunk *takeDamge = Mix_LoadWAV("assets\\takeDamge.wav");
+    Mix_Chunk *fireBulletSound,*slashSound,*enemyBulletSound,*deadMusic,*movingSound,*takeDamge ;
 
     int enemySpawnTimer;
     int stageResetTimer;
@@ -74,6 +78,8 @@ struct Game {
 
     void init(Graphics& graphics)
     {
+        //khởi tạo hình ảnh, animation , âm thanh
+
         player.texture = graphics.loadTexture("img/ship.png");
         SDL_QueryTexture(player.texture, NULL, NULL, &player.w, &player.h);
         enemyTexture = graphics.loadTexture("img/enemy.png");
@@ -82,7 +88,7 @@ struct Game {
         bulletTexture = graphics.loadTexture("img/tinyBlackBox.png");
         enemySlashTexture = graphics.loadTexture("img/slash.png");
         enemyBulletTexture = graphics.loadTexture("img/enemyBullet.png");
-        background = graphics.loadTexture("img/bikiniBottom.jpg");
+        background = graphics.loadTexture("img/background.jpg");
 
         slimeMove = graphics.loadTexture(SLIME_FILE);
         slimeTexture = graphics.loadTexture(SLIME_FILE);
@@ -105,6 +111,15 @@ struct Game {
         dead.init(deadTexture, DEAD_FRAMES, DEAD_CLIPS);
 
         //initAnimation();
+        fireBulletSound = Mix_LoadWAV("assets\\bulletSound.wav");
+        slashSound = Mix_LoadWAV("assets\\slashSound.wav");
+        enemyBulletSound = Mix_LoadWAV("assets\\enemyBulletSound.wav");
+        deadMusic = Mix_LoadWAV("assets\\deadSound.wav");
+        movingSound = Mix_LoadWAV("assets\\movingSound.wav");
+        takeDamge = Mix_LoadWAV("assets\\takeDamge.wav");
+
+        font = graphics.loadFont("assets/Atop-R99O3.ttf", 100);
+
 
         reset();
     }
@@ -331,7 +346,8 @@ struct Game {
             enemy->texture = enemyTexture;
             SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
 
-            enemySpawnTimer = 120 + (rand() % 60);
+            enemySpawnTimer = 100 + rand()%60;
+
         }
     }
     void spawnEnemies_2(void) {
@@ -355,7 +371,8 @@ struct Game {
             enemy->texture = enemyTexture;
             SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
 
-            enemySpawnTimer = 120 + (rand() % 60);
+            enemySpawnTimer = 100 + rand()%60;
+
         }
     }
 
@@ -406,15 +423,14 @@ struct Game {
         }
     }
     void doLogic(int keyboard[],bool mouseButtonDown,int mouseX,int mouseY) {
-        doBackground();
         if (player.health <= 0) {stageResetTimer--;replay=1;}
-
-        doPlayer(keyboard,mouseButtonDown,mouseX,mouseY);
-        doFighters();
-        doEnemies();
+        doBackground();
+        doPlayer(keyboard,mouseButtonDown,mouseX,mouseY);//thực hiện nhập sự kiện bàn phím/chuột
+        doFighters();//thực hiện tấn công di chuyển của quái vật và nhân vật
+        doEnemies();// điều chỉnh hướng di chuyển quái vật
         doEnemyBullets();
-        doPlayerBullets();
         doSlash();
+        doPlayerBullets();
         spawnAllEnemies();
     }
     void drawBackground(SDL_Renderer* renderer) {
@@ -428,10 +444,32 @@ struct Game {
             SDL_RenderCopy(renderer, background, NULL, &dest);
         }
     }
+    void drawHPBar(Graphics graphics, Entity* character, int x, int y, int width, int height) {
+    SDL_SetRenderDrawColor(graphics.renderer, 0, 0, 0, 255); // màu đen
+    SDL_Rect borderRect = {x, y, width+1, height};
+    SDL_RenderDrawRect(graphics.renderer, &borderRect);
 
+      // Vẽ phần HP còn lại bên trong thanh
+    int hpWidth = (character->health * width) / maxHealth; // phần hp còn lại
+
+    SDL_SetRenderDrawColor(graphics.renderer, 255, 0, 0, 255); // màu đỏ
+    SDL_Rect hpRect = {x + 1, y + 1, hpWidth - 1, height - 2};
+    SDL_RenderFillRect(graphics.renderer, &hpRect);
+    }
+
+    void drawTime(Graphics& graphics ,char timeString[],int minutes,int seconds){
+        SDL_Surface* timeSurface = TTF_RenderText_Solid(font, timeString, {255, 255, 255});
+        SDL_Texture* timeTexture = SDL_CreateTextureFromSurface(graphics.renderer, timeSurface);
+        SDL_Rect timeRect = {300, 0, 200, 100};
+        SDL_UpdateTexture(timeTexture, NULL, &timeRect, 0);
+        SDL_RenderCopyEx(graphics.renderer, timeTexture, NULL, &timeRect,0,NULL,SDL_FLIP_NONE);
+        SDL_FreeSurface(timeSurface);
+        SDL_DestroyTexture(timeTexture);
+    }
     void draw(Graphics& graphics)
     {
         //drawBackground(graphics.renderer);
+
         SDL_Rect dest;
         dest.x = 0;
         dest.y = 0;
@@ -441,6 +479,14 @@ struct Game {
         graphics.renderer;
         if (player.health>0)
         {
+            drawHPBar(graphics,&player,0,0,200,20);
+            elapsedTime = SDL_GetTicks() / 1000.0;
+            minutes = (int)elapsedTime / 60;
+            seconds = (int)elapsedTime % 60;
+            char timeString[10];
+            sprintf(timeString, "%02d:%02d", minutes, seconds);
+            drawTime(graphics,timeString,minutes,seconds);
+
             slime.slimetick();
             if (player.ImmunityDamage>0) player.ImmunityDamage--;
             for (Entity* b: rangeEnemy)
@@ -479,7 +525,8 @@ struct Game {
             graphics.render(player.x,player.y,*status,0);
 
         }
-
+        //SDL_SetRenderDrawColor(graphics.renderer, 0, 0, 0, 255);
+        //SDL_RenderClear(graphics.renderer);
     }
 
 };

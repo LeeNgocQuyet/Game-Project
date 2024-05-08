@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     setting.render(graphics);
     quit.render(graphics);
 
-    SDL_Texture* background = graphics.loadTexture("img/background.jpg");
+    SDL_Texture* background = graphics.loadTexture("img/mBackground.jpg");
     SDL_Rect dest;
         dest.x = 0;
         dest.y = 0;
@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
         quit.render(graphics);
         graphics.presentScene();
     }
+    graphics.quit();
     SDL_Quit();
 
 

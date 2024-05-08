@@ -3,7 +3,7 @@
 #include <SDL_ttf.h>
 #include "graphics.h"
 #include <string>
-using namespace std;
+//using namespace std;
 
 class Menu{
 public:
