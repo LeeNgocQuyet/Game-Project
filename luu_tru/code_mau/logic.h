@@ -34,7 +34,11 @@ struct Game {
 	SDL_Surface* health_bar = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0xFF000000, 0x00FF0000, 0x000000FF, 0xFF000000);
 	int healthPercent = 1;
     int redLength = (healthPercent * SCREEN_WIDTH);
+
+
     double elapsedTime = 0;
+    Uint32 pauseTime =0;
+    Uint32 delta=0;
     int minutes ,seconds ;
 
     animation slime;
@@ -480,7 +484,8 @@ struct Game {
         if (player.health>0)
         {
             drawHPBar(graphics,&player,0,0,200,20);
-            elapsedTime = SDL_GetTicks() / 1000.0;
+            elapsedTime = (SDL_GetTicks()-delta)/1000;
+
             minutes = (int)elapsedTime / 60;
             seconds = (int)elapsedTime % 60;
             char timeString[10];

@@ -17,7 +17,7 @@ public:
 
     SDL_Color color = {255, 255, 0, 0};
     SDL_Texture* nameTexture = nullptr;
-    void init(Graphics graphics) ;
+    void init(Graphics graphics,int size) ;
     void render(Graphics graphics);
     bool isClicked(int mouseX,int mouseY);
 };

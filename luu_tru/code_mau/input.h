@@ -7,6 +7,7 @@ struct Input {
     bool mouseButtonDown=0;
     int mouseX=100;
     int mouseY=100;
+    bool isPaused=false;
 	void init()
     {
         for (int i = 0; i < MAX_KEYBOARD_KEYS; i++) keyboard[i] = 0;
@@ -27,6 +28,7 @@ struct Input {
                         && event.key.keysym.scancode < MAX_KEYBOARD_KEYS) {
                         keyboard[event.key.keysym.scancode] = 1;
                     }
+                    if (event.key.keysym.sym == SDLK_ESCAPE) isPaused=!isPaused;
                     break;
 
                 case SDL_KEYUP:
@@ -43,7 +45,6 @@ struct Input {
                 case SDL_MOUSEBUTTONUP:
                     mouseButtonDown=0;
                     break;
-
 
                 default:
                     break;

@@ -1,7 +1,7 @@
 #include "menu.h"
 
-void Menu::init(Graphics graphics) {
-    this->font = graphics.loadFont("assets/Atop-R99O3.ttf", 100);
+void Menu::init(Graphics graphics,int size) {
+    this->font = graphics.loadFont("assets/Atop-R99O3.ttf", size);
     this->color = {255, 255, 0, 0};
     this->nameTexture = graphics.renderText(this->name, this->font, this->color);
     int textWidth, textHeight;
