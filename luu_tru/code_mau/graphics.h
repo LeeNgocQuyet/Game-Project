@@ -71,7 +71,7 @@ struct Graphics {
         return texture;
     }
 
-    void renderTexture( SDL_Texture *texture,const int x,const int y)
+    void renderTexture( SDL_Texture *texture,const int x,const int y,bool flip_horizontal=0)
     {
         SDL_Rect dest;
 
@@ -79,7 +79,10 @@ struct Graphics {
         dest.y = y;
         SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
-        SDL_RenderCopy(renderer, texture, NULL, &dest);
+        //SDL_RenderCopy(renderer, texture, NULL, &dest);
+        if (!flip_horizontal) SDL_RenderCopyEx(renderer, texture, NULL, &dest, 0, NULL, SDL_FLIP_NONE);
+        else
+        SDL_RenderCopyEx(renderer, texture, NULL, &dest, 0, NULL, SDL_FLIP_HORIZONTAL);
     }
 
     void blitRect( SDL_Texture *texture, SDL_Rect *src,const int x,const int y)
@@ -99,13 +102,9 @@ struct Graphics {
         if (flip_horizontal) {
         renderQuad.x += renderQuad.w;
         renderQuad.w = -renderQuad.w;
-        SDL_RenderCopyEx(renderer,
-                        a.texture,
-                         clip, &renderQuad,0, NULL,SDL_FLIP_NONE );
+        SDL_RenderCopyEx(renderer,a.texture,clip, &renderQuad,0, NULL,SDL_FLIP_NONE );
         }
-        SDL_RenderCopyEx(renderer,
-                        a.texture,
-                         clip, &renderQuad,0, NULL,SDL_FLIP_HORIZONTAL);
+        SDL_RenderCopyEx(renderer,a.texture,clip, &renderQuad,0, NULL,SDL_FLIP_HORIZONTAL);
     }
     Mix_Music *loadMusic(const char* path)
     {

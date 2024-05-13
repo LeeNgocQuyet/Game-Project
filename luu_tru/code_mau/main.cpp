@@ -51,17 +51,17 @@ int main(int argc, char *argv[])
 
     Menu play("play",100,100);
     Menu replay("replay",100,100);
-    Menu setting("credit",100,200);
+    Menu Record("Record",100,200);
     Menu quit("quit",100,300);
     Menu pause("press ESC to Continue/Pause",0,200);
     play.init(graphics,100);
     replay.init(graphics,100);
-    setting.init(graphics,100);
+    Record.init(graphics,100);
     quit.init(graphics,100);
     pause.init(graphics,50);
 
     play.render(graphics);
-    setting.render(graphics);
+    Record.render(graphics);
     quit.render(graphics);
 
 
@@ -115,9 +115,9 @@ int main(int argc, char *argv[])
                         SDL_Delay(20);
 
                     }
-                } else if (setting.isClicked(mouseX, mouseY)) {
+                } else if (Record.isClicked(mouseX, mouseY)) {
+                    //graphics.renderText()
                     graphics.prepareScene();
-                    cout<<"2";
 
                 } else if (quit.isClicked(mouseX, mouseY)) {
                     isRunning = false;
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
         }
         if(game.replay==1) replay.render(graphics);
         else play.render(graphics);
-        setting.render(graphics);
+        Record.render(graphics);
         quit.render(graphics);
         graphics.presentScene();
     }

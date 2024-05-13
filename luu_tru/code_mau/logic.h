@@ -22,6 +22,7 @@ void initPlayer(Entity& player) {
 }
 
 struct Game {
+    int score=0;
     bool replay=0;
     Entity player;
     list<Entity*> rangeEnemy;
@@ -50,10 +51,11 @@ struct Game {
 
     TTF_Font* font;
 
-    SDL_Texture *background,*bulletTexture, *enemyTexture,*enemy_2Texture, *enemyBulletTexture,*enemySlashTexture,
+    SDL_Texture *gunTexture,*background,*bulletTexture, *enemyTexture,*enemy_2Texture, *enemyBulletTexture,*enemySlashTexture,
     *idleTexture,*runTexture,*getHitTexture,*deadTexture,*Idle,*Run,*GetHit,*Dead,*slimeMove,*slimeTexture;
     Mix_Chunk *fireBulletSound,*slashSound,*enemyBulletSound,*deadMusic,*movingSound,*takeDamge ;
 
+    double angleGun=1;
     int enemySpawnTimer;
     int stageResetTimer;
 
@@ -88,7 +90,7 @@ struct Game {
         SDL_QueryTexture(player.texture, NULL, NULL, &player.w, &player.h);
         enemyTexture = graphics.loadTexture("img/enemy.png");
         enemy_2Texture = graphics.loadTexture("img/ship.png");
-
+        gunTexture = graphics.loadTexture("img/gun.png");
         bulletTexture = graphics.loadTexture("img/tinyBlackBox.png");
         enemySlashTexture = graphics.loadTexture("img/slash.png");
         enemyBulletTexture = graphics.loadTexture("img/enemyBullet.png");
@@ -189,7 +191,14 @@ struct Game {
 
         slash->x += (enemy->w / 2) - (slash->w / 2);
         slash->y += (enemy->h / 2) - (slash->h / 2);
+        if (enemy->x > player.x) slash->turnleft=0;
+        else slash->turnleft=1;
+        float dx = player.x - slash->x;
+        float dy = player.y - slash->y;
+        float angle = atan2(dy, dx);
 
+        slash->x += cos(angle) * slash->w;
+        slash->y += sin(angle) * slash->h;
         enemy->reload = 120;
         Mix_PlayChannel(-1,slashSound,0);
 
@@ -205,7 +214,11 @@ struct Game {
         if (keyboard[SDL_SCANCODE_DOWN]) player.dy = PLAYER_SPEED;
         if (keyboard[SDL_SCANCODE_LEFT]) {player.dx = -PLAYER_SPEED;player.turnleft=false;}
         if (keyboard[SDL_SCANCODE_RIGHT]) {player.dx = PLAYER_SPEED;player.turnleft=true;}
-        if (mouseButtonDown && player.reload == 0) {fireBullet(mouseX,mouseY);Mix_PlayChannel(-1,fireBulletSound,0);};
+        if (mouseButtonDown && player.reload == 0) {
+                fireBullet(mouseX,mouseY);
+            Mix_PlayChannel(-1,fireBulletSound,0);
+            angleGun = angle_degrees(player.x,player.y,mouseY, mouseX);
+            };
 
         if (!player.isMoving()) status = &idle;
         else {status = &run;}
@@ -242,6 +255,7 @@ struct Game {
             if (enemy != &player)
             if (enemy->side != b->side && b->collides(enemy)) {
                 enemy->health -= 1;
+                score +=10;
                 return true;
             }
         }
@@ -249,6 +263,7 @@ struct Game {
             if (enemy != &player)
             if (enemy->side != b->side && b->collides(enemy)) {
                 enemy->health -= 1;
+                score +=10;
                 return true;
             }
         }
@@ -461,14 +476,45 @@ struct Game {
     SDL_RenderFillRect(graphics.renderer, &hpRect);
     }
 
-    void drawTime(Graphics& graphics ,char timeString[],int minutes,int seconds){
+    void drawTime(Graphics& graphics ,char timeString[],int x,int y){
         SDL_Surface* timeSurface = TTF_RenderText_Solid(font, timeString, {255, 255, 255});
         SDL_Texture* timeTexture = SDL_CreateTextureFromSurface(graphics.renderer, timeSurface);
-        SDL_Rect timeRect = {300, 0, 200, 100};
+        SDL_Rect timeRect = {x, y, 200, 100};
         SDL_UpdateTexture(timeTexture, NULL, &timeRect, 0);
         SDL_RenderCopyEx(graphics.renderer, timeTexture, NULL, &timeRect,0,NULL,SDL_FLIP_NONE);
         SDL_FreeSurface(timeSurface);
         SDL_DestroyTexture(timeTexture);
+    }
+
+    void drawTime(Graphics& graphics ,int score,int x,int y){
+        char scoreString[6];
+        for (int i = 0; i < 6; i++) {
+            scoreString[i] = score % 10 + '0';
+            score /= 10;
+        }
+
+        SDL_Surface*  scoreSurface= TTF_RenderText_Solid(font, scoreString, {255, 255, 255});
+        SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(graphics.renderer, scoreSurface);
+        SDL_Rect timeRect = {x, y, 200, 100};
+        SDL_UpdateTexture(scoreTexture, NULL, &timeRect, 0);
+        SDL_RenderCopyEx(graphics.renderer, scoreTexture, NULL, &timeRect,0,NULL,SDL_FLIP_NONE);
+        SDL_FreeSurface(scoreSurface);
+        SDL_DestroyTexture(scoreTexture);
+    }
+
+    void drawAngle(SDL_Texture* texture,Entity &player,Graphics &graphics,double angle){
+        SDL_Rect textureDimensions;
+      SDL_QueryTexture(texture, NULL, NULL, &textureDimensions.w, &textureDimensions.h);
+
+      SDL_Point rotationOrigin = {textureDimensions.w / 2, textureDimensions.h / 2};
+
+      SDL_Rect destinationRect;
+      destinationRect.x = player.x - textureDimensions.w / 2;
+      destinationRect.y = player.y - textureDimensions.h / 2;
+      destinationRect.w = textureDimensions.w;
+      destinationRect.h = textureDimensions.h;
+
+      SDL_RenderCopyEx(graphics.renderer, texture, NULL, &destinationRect, angle, &rotationOrigin, SDL_FLIP_NONE);
     }
     void draw(Graphics& graphics)
     {
@@ -483,6 +529,7 @@ struct Game {
         graphics.renderer;
         if (player.health>0)
         {
+            score++;
             drawHPBar(graphics,&player,0,0,200,20);
             elapsedTime = (SDL_GetTicks()-delta)/1000;
 
@@ -490,7 +537,9 @@ struct Game {
             seconds = (int)elapsedTime % 60;
             char timeString[10];
             sprintf(timeString, "%02d:%02d", minutes, seconds);
-            drawTime(graphics,timeString,minutes,seconds);
+
+            drawTime(graphics,timeString,300,0);
+            drawTime(graphics,score,500,0);
 
             slime.slimetick();
             if (player.ImmunityDamage>0) player.ImmunityDamage--;
@@ -504,6 +553,7 @@ struct Game {
                     else {
 
                         graphics.render(player.x,player.y,*status,player.turnleft);
+                        drawAngle(gunTexture,player,graphics,angleGun);
                         status->tick();
                     }
                 }
@@ -519,7 +569,8 @@ struct Game {
                 graphics.renderTexture(b->texture, b->x, b->y);
 
             for (Entity* b: slashes)
-                graphics.renderTexture(b->texture, b->x, b->y);
+                graphics.renderTexture(b->texture, b->x, b->y,b->turnleft);
+
 
         }
 
@@ -530,8 +581,7 @@ struct Game {
             graphics.render(player.x,player.y,*status,0);
 
         }
-        //SDL_SetRenderDrawColor(graphics.renderer, 0, 0, 0, 255);
-        //SDL_RenderClear(graphics.renderer);
+
     }
 
 };
