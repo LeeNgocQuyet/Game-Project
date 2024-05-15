@@ -40,6 +40,7 @@
 		<Unit filename="clip.h" />
 		<Unit filename="defs.h" />
 		<Unit filename="graphics.h" />
+		<Unit filename="highScore.h" />
 		<Unit filename="input.h" />
 		<Unit filename="logic.h" />
 		<Unit filename="main.cpp" />

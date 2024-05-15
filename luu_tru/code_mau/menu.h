@@ -16,6 +16,7 @@ public:
     TTF_Font* font = nullptr;
 
     SDL_Color color = {255, 255, 0, 0};
+    void getName(string _name);
     SDL_Texture* nameTexture = nullptr;
     void init(Graphics graphics,int size) ;
     void render(Graphics graphics);

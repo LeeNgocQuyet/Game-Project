@@ -22,11 +22,11 @@ void calcSlope(int x1, int y1, int x2, int y2, float *dx, float *dy)
 
 double angle_degrees(int x1, int y1, int x2, int y2) {
 
-  double adjacent = abs(x2 - x1);
-  double opposite = abs(y2 - y1);
+  double adjacent = (x2 - x1);
+  double opposite = (y2 - y1);
   double angle_radians = atan2(opposite, adjacent);
 
-  double angle_degrees = angle_radians * 180.0 / M_PI;
+  double angle_degrees = angle_radians * 180.0 /3.14 ;// M_PI;
 
   return angle_degrees;
 }

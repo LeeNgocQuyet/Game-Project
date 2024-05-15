@@ -54,17 +54,15 @@
 
 1713338771 c:\ltnc\game project\survival\code_mau\clip.h
 
-1715526834 source:c:\ltnc\game project\luu_tru\code_mau\main.cpp
+1715695028 source:c:\ltnc\game project\luu_tru\code_mau\main.cpp
 	<iostream>
 	<SDL.h>
-	<SDL_image.h>
-	<SDL_mixer.h>
-	<SDL_ttf.h>
 	"defs.h"
 	"input.h"
 	"graphics.h"
 	"logic.h"
 	"menu.h"
+	"highScore.h"
 	<ctime>
 
 1715132722 c:\ltnc\game project\luu_tru\code_mau\defs.h
@@ -82,28 +80,23 @@
 	<cmath>
 	<vector>
 
-1715524012 c:\ltnc\game project\luu_tru\code_mau\graphics.h
+1715651994 c:\ltnc\game project\luu_tru\code_mau\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_mixer.h>
+	<SDL_ttf.h>
 	"defs.h"
 	"structs.h"
 
-1715527552 c:\ltnc\game project\luu_tru\code_mau\logic.h
+1715695896 c:\ltnc\game project\luu_tru\code_mau\logic.h
 	<iostream>
 	<list>
-	<SDL.h>
-	<SDL_image.h>
-	<SDL_mixer.h>
-	<SDL_render.h>
-	"defs.h"
 	"graphics.h"
-	"structs.h"
 	"calculate.h"
 	"animation_frame.h"
 	"clip.h"
 
-1715249393 c:\ltnc\game project\luu_tru\code_mau\calculate.h
+1715649785 c:\ltnc\game project\luu_tru\code_mau\calculate.h
 	<math.h>
 	<iostream>
 
@@ -126,12 +119,12 @@
 
 1714634186 source:c:\ltnc\game project\luu_tru\code_mau\clip.cpp
 
-1715243433 c:\ltnc\game project\luu_tru\code_mau\menu.h
+1715693474 c:\ltnc\game project\luu_tru\code_mau\menu.h
 	<SDL_ttf.h>
 	"graphics.h"
 	<string>
 
-1715243433 source:c:\ltnc\game project\luu_tru\code_mau\menu.cpp
+1715693384 source:c:\ltnc\game project\luu_tru\code_mau\menu.cpp
 	"menu.h"
 
 1715007825 source:c:\ltnc\game project\luu_tru\code_mau\textbox.cpp
@@ -148,4 +141,8 @@
 
 1715094637 source:c:\ltnc\game project\luu_tru\code_mau\structs.cpp
 	"structs.h"
+
+1715694139 c:\ltnc\game project\luu_tru\code_mau\highscore.h
+	<fstream>
+	<sstream>
 

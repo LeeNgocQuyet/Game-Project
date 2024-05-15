@@ -2,13 +2,7 @@
 #define _LOGIC__H
 #include <iostream>
 #include <list>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include <SDL_render.h>
-#include "defs.h"
 #include "graphics.h"
-#include "structs.h"
 #include "calculate.h"
 #include "animation_frame.h"
 #include "clip.h"
@@ -70,6 +64,8 @@ struct Game {
     }
     void reset()
     {
+        score=0;
+        delta=elapsedTime;
         empty(rangeEnemy);
         empty(meleeEnemy);
         empty(bullets);
@@ -86,7 +82,7 @@ struct Game {
     {
         //khởi tạo hình ảnh, animation , âm thanh
 
-        player.texture = graphics.loadTexture("img/ship.png");
+        player.texture = graphics.loadTexture("img/character.png");
         SDL_QueryTexture(player.texture, NULL, NULL, &player.w, &player.h);
         enemyTexture = graphics.loadTexture("img/enemy.png");
         enemy_2Texture = graphics.loadTexture("img/ship.png");
@@ -137,6 +133,7 @@ struct Game {
 
         bullet->x = player.x;
         bullet->y = player.y;
+        bullet->x += (player.w / 2) - (bullet->w / 2);
         bullet->y += (player.h / 2) - (bullet->h / 2);
         bullet->health = 1;
         bullet->texture = bulletTexture;
@@ -217,7 +214,7 @@ struct Game {
         if (mouseButtonDown && player.reload == 0) {
                 fireBullet(mouseX,mouseY);
             Mix_PlayChannel(-1,fireBulletSound,0);
-            angleGun = angle_degrees(player.x,player.y,mouseY, mouseX);
+            angleGun = angle_degrees(player.x,player.y,mouseX, mouseY);
             };
 
         if (!player.isMoving()) status = &idle;
@@ -229,7 +226,7 @@ struct Game {
         if (player.collides(b)&&player.ImmunityDamage==0){
             player.health -= 1;
             status=&getHit;
-            player.ImmunityDamage=100;
+            player.ImmunityDamage=10;
             Mix_PlayChannel(-1,takeDamge,0);
             return true;
         }
@@ -441,17 +438,7 @@ struct Game {
             backgroundX = 0;
         }
     }
-    void doLogic(int keyboard[],bool mouseButtonDown,int mouseX,int mouseY) {
-        if (player.health <= 0) {stageResetTimer--;replay=1;}
-        doBackground();
-        doPlayer(keyboard,mouseButtonDown,mouseX,mouseY);//thực hiện nhập sự kiện bàn phím/chuột
-        doFighters();//thực hiện tấn công di chuyển của quái vật và nhân vật
-        doEnemies();// điều chỉnh hướng di chuyển quái vật
-        doEnemyBullets();
-        doSlash();
-        doPlayerBullets();
-        spawnAllEnemies();
-    }
+
     void drawBackground(SDL_Renderer* renderer) {
         SDL_Rect dest;
         for (int x = backgroundX ; x < SCREEN_WIDTH ; x += SCREEN_WIDTH) {
@@ -487,8 +474,8 @@ struct Game {
     }
 
     void drawTime(Graphics& graphics ,int score,int x,int y){
-        char scoreString[6];
-        for (int i = 0; i < 6; i++) {
+        char scoreString[5];
+        for (int i = 5; i >=0; i--) {
             scoreString[i] = score % 10 + '0';
             score /= 10;
         }
@@ -504,17 +491,23 @@ struct Game {
 
     void drawAngle(SDL_Texture* texture,Entity &player,Graphics &graphics,double angle){
         SDL_Rect textureDimensions;
-      SDL_QueryTexture(texture, NULL, NULL, &textureDimensions.w, &textureDimensions.h);
+        SDL_QueryTexture(texture, NULL, NULL, &textureDimensions.w, &textureDimensions.h);
 
-      SDL_Point rotationOrigin = {textureDimensions.w / 2, textureDimensions.h / 2};
+        SDL_Point rotationOrigin = {textureDimensions.w / 2, textureDimensions.h / 2};
 
-      SDL_Rect destinationRect;
-      destinationRect.x = player.x - textureDimensions.w / 2;
-      destinationRect.y = player.y - textureDimensions.h / 2;
-      destinationRect.w = textureDimensions.w;
-      destinationRect.h = textureDimensions.h;
-
-      SDL_RenderCopyEx(graphics.renderer, texture, NULL, &destinationRect, angle, &rotationOrigin, SDL_FLIP_NONE);
+        SDL_Rect destinationRect;
+        destinationRect.x = player.x ;
+        destinationRect.y = player.y + 20;
+        destinationRect.w = textureDimensions.w;
+        destinationRect.h = textureDimensions.h;
+        if (-90<angle&&angle<90) {
+            destinationRect.x = player.x+20;
+            SDL_RenderCopyEx(graphics.renderer, texture, NULL, &destinationRect, angle, &rotationOrigin, SDL_FLIP_NONE);
+        }
+        else{
+            destinationRect.x = player.x-20;
+            SDL_RenderCopyEx(graphics.renderer, texture, NULL, &destinationRect, angle, &rotationOrigin, SDL_FLIP_VERTICAL);
+        }
     }
     void draw(Graphics& graphics)
     {
@@ -529,7 +522,6 @@ struct Game {
         graphics.renderer;
         if (player.health>0)
         {
-            score++;
             drawHPBar(graphics,&player,0,0,200,20);
             elapsedTime = (SDL_GetTicks()-delta)/1000;
 
@@ -539,7 +531,7 @@ struct Game {
             sprintf(timeString, "%02d:%02d", minutes, seconds);
 
             drawTime(graphics,timeString,300,0);
-            drawTime(graphics,score,500,0);
+            drawTime(graphics,score,600,0);
 
             slime.slimetick();
             if (player.ImmunityDamage>0) player.ImmunityDamage--;
@@ -579,9 +571,19 @@ struct Game {
             status=&dead;
             status->tick();
             graphics.render(player.x,player.y,*status,0);
-
         }
 
+    }
+    void doLogic(int keyboard[],bool mouseButtonDown,int mouseX,int mouseY) {
+        if (player.health <= 0) {stageResetTimer--;replay=1;}
+        doBackground();
+        doPlayer(keyboard,mouseButtonDown,mouseX,mouseY);//thực hiện nhập sự kiện bàn phím/chuột
+        doFighters();//thực hiện tấn công di chuyển của quái vật và nhân vật
+        doEnemies();// điều chỉnh hướng di chuyển quái vật
+        doEnemyBullets();
+        doSlash();
+        doPlayerBullets();
+        spawnAllEnemies();
     }
 
 };

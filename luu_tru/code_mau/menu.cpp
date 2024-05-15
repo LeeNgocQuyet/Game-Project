@@ -1,5 +1,4 @@
 #include "menu.h"
-
 void Menu::init(Graphics graphics,int size) {
     this->font = graphics.loadFont("assets/Atop-R99O3.ttf", size);
     this->color = {255, 255, 0, 0};

@@ -1,13 +1,12 @@
 #include <iostream>
 #include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include <SDL_ttf.h>
+
 #include "defs.h"
 #include "input.h"
 #include "graphics.h"
 #include "logic.h"
 #include "menu.h"
+#include "highScore.h"
 #include <ctime>
 
 using namespace std;
@@ -50,11 +49,17 @@ int main(int argc, char *argv[])
     //Menu
 
     Menu play("play",100,100);
+    string highscore = GetHighScoreFromFile("high_score.txt");
+    bool showHighScore=0;
+
+    Menu highScore(stringToChar(highscore),100,300);
     Menu replay("replay",100,100);
     Menu Record("Record",100,200);
     Menu quit("quit",100,300);
     Menu pause("press ESC to Continue/Pause",0,200);
+
     play.init(graphics,100);
+    highScore.init(graphics,200);
     replay.init(graphics,100);
     Record.init(graphics,100);
     quit.init(graphics,100);
@@ -116,18 +121,26 @@ int main(int argc, char *argv[])
 
                     }
                 } else if (Record.isClicked(mouseX, mouseY)) {
-                    //graphics.renderText()
-                    graphics.prepareScene();
+                    showHighScore=!showHighScore;
+                    SDL_RenderCopy(graphics.renderer, background, NULL, &dest);
+                    if (showHighScore) highScore.render(graphics);
+
+                    //graphics.presentScene();
 
                 } else if (quit.isClicked(mouseX, mouseY)) {
                     isRunning = false;
                 }
                 break;
         }
-        if(game.replay==1) replay.render(graphics);
-        else play.render(graphics);
+        UpdateHighScore("high_score.txt", game.score, highscore);
+        if (!showHighScore){
+            if(game.replay==1) replay.render(graphics);
+            else play.render(graphics);
+
+            quit.render(graphics);
+
+        }
         Record.render(graphics);
-        quit.render(graphics);
         graphics.presentScene();
     }
     graphics.quit();
