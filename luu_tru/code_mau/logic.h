@@ -10,7 +10,7 @@
 void initPlayer(Entity& player) {
     player.x = 400;
     player.y = 300;
-    player.health = 20;
+    player.health = 5;
     player.side = SIDE_PLAYER;
     player.reload = 0;
 }

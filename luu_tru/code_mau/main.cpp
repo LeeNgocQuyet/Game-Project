@@ -52,14 +52,13 @@ int main(int argc, char *argv[])
     string highscore = GetHighScoreFromFile("high_score.txt");
     bool showHighScore=0;
 
-    Menu highScore(stringToChar(highscore),100,300);
     Menu replay("replay",100,100);
     Menu Record("Record",100,200);
     Menu quit("quit",100,300);
     Menu pause("press ESC to Continue/Pause",0,200);
 
     play.init(graphics,100);
-    highScore.init(graphics,200);
+
     replay.init(graphics,100);
     Record.init(graphics,100);
     quit.init(graphics,100);
@@ -83,8 +82,8 @@ int main(int argc, char *argv[])
     bool isRunning = true;
     bool isPaused = false;
     while (isRunning) {
-        SDL_WaitEvent(&m_event);
 
+        SDL_WaitEvent(&m_event);
         switch (m_event.type) {
             case SDL_QUIT:
                 isRunning = false;
@@ -121,6 +120,10 @@ int main(int argc, char *argv[])
 
                     }
                 } else if (Record.isClicked(mouseX, mouseY)) {
+                    highscore = GetHighScoreFromFile("high_score.txt");
+                    Menu highScore(stringToChar(highscore),100,300);
+                    //cout<<highscore<<endl;
+                    highScore.init(graphics,200);
                     showHighScore=!showHighScore;
                     SDL_RenderCopy(graphics.renderer, background, NULL, &dest);
                     if (showHighScore) highScore.render(graphics);
@@ -133,6 +136,7 @@ int main(int argc, char *argv[])
                 break;
         }
         UpdateHighScore("high_score.txt", game.score, highscore);
+
         if (!showHighScore){
             if(game.replay==1) replay.render(graphics);
             else play.render(graphics);
